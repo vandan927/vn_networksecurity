@@ -23,6 +23,11 @@ from sklearn.ensemble import (
 
 import mlflow
 
+import dagshub
+dagshub.init(repo_owner='vandan927', repo_name='vn_networksecurity', mlflow=True)
+
+
+
 class ModelTrainer:
     def __init__(self,model_trainer_config: ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact):
         try:
@@ -54,26 +59,26 @@ class ModelTrainer:
         params = {
             "Decision Tree" :{
                 'criterion': ['gini','entropy','log_loss'],
-                'splitter': ['best','random'],
-                'max_features':['sqrt','log2']
+                # 'splitter': ['best','random'],
+                # 'max_features':['sqrt','log2']
             },
             "Random Forest":{
                 'criterion':['gini','entropy','log_loss'],
-                'max_features':['sqrt','log2',None],
-                'n_estimators':[8,16,32,64,128,256]
+                # 'max_features':['sqrt','log2',None],
+                # 'n_estimators':[8,16,32,64,128,256]
             },
             "Gradient Boosting":{
                 'loss':['log_loss','exponential'],
                 'learning_rate':[0.1,0.01,0.05,0.001],
-                'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
-                'criterion': ['squared_error','friedman_mse'],
-                'max_features': ['auto','sqrt','log2'],
-                'n_estimators':[8,16,32,64,128,256]
+                # 'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
+                # 'criterion': ['squared_error','friedman_mse'],
+                # 'max_features': ['auto','sqrt','log2'],
+                # 'n_estimators':[8,16,32,64,128,256]
             },
             "Logistic Regression":{},
             "AdaBoost":{
                 'learning_rate':[0.1,0.01,0.5,0.001],
-                'n_estimators':[8,16,32,64,128,256]
+                # 'n_estimators':[8,16,32,64,128,256]
             }
         }
         model_report:dict=evaluate_models(x_train=x_train,y_train=y_train,x_test=x_test,y_test=y_test,models=models,param=params)
@@ -104,6 +109,8 @@ class ModelTrainer:
 
         Network_Model = NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=Network_Model)
+
+        save_object("final_model/model.pkl",best_model)
 
         ## Model Trainer Artifact
         model_trainer_artifact =ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
