@@ -12,7 +12,8 @@ class TrainingPipelineConfig:
         self.pipeline_name=training_pipeline.PIPELINE_NAME
         self.artifact_name=training_pipeline.ARTIFACT_DIR
         self.artifact_dir=os.path.join(self.artifact_name,timestamp)
-        self.timestamp:str = timestamp
+        self.model_dir=os.path.join("final_model")
+        self.timestamp: str=timestamp
 
 
 class DataIngestionConfig:
@@ -23,7 +24,8 @@ class DataIngestionConfig:
         )
         self.feature_store_file_path:str = os.path.join(
             self.data_ingestion_dir,
-            training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR
+				training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR,
+				 training_pipeline.FILE_NAME
         )
         self.training_file_path:str = os.path.join(
             self.data_ingestion_dir,
